@@ -9,17 +9,20 @@ public class Main {
     public static void main(String[] args) {
         RamificacionYPoda ramificacionYPoda = new RamificacionYPoda();
 
-        double[] li = new double[]{1,1.2f,1.4f,1.6f,1.8f,2,2.2f,2.4f,2.6f,2.8f,3};
-        double menor = Arrays.stream(li).
-                filter(i -> i != 0)
+        int[] li = new int[]{440,460,480};
+        String[] header = new String[]{"440","460","480"};
+        int menor = Arrays.stream(li)
+                .filter(i -> i != 0)
                 .min()
                 .orElse(0);
 //        ramificacionYPoda.podar(147,);
 //        int numero = 4;
 //        ArrayList<Integer> numeros = new ArrayList<>();
 //        ramificacionYPoda.combinaciones(numero,numeros,0);
-        ArrayList<ArrayList<ElementoPatron>> esquemas = new ArrayList<>();
-        ramificacionYPoda.ramificar(esquemas, 147.2,(double)0, new ArrayList<>(),li,menor,0);
-        System.out.println(esquemas);
+        ramificacionYPoda.createExcel(header);
+        for (int i=0;i<li.length;i++){
+            ramificacionYPoda.ramificar(14520,0, new ArrayList<>(),li,menor,0,i);
+        }
+        ramificacionYPoda.closeExcel();
     }
 }

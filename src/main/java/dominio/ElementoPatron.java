@@ -7,14 +7,14 @@ import java.util.List;
 
 public class ElementoPatron {
     private Integer cantidad;
-    private Double sumaMedida;
-    private Double medida;
-    DecimalFormat df = new DecimalFormat("#.00");
+    private Integer sumaMedida;
+    private Integer medida;
+//    DecimalFormat df = new DecimalFormat("#.00");
 
     public ElementoPatron() {
     }
 
-    public ElementoPatron(Integer cantidad, Double sumaMedida, Double medida) {
+    public ElementoPatron(Integer cantidad, Integer sumaMedida, Integer medida) {
         this.cantidad = cantidad;
         this.sumaMedida = sumaMedida;
         this.medida = medida;
@@ -29,16 +29,16 @@ public class ElementoPatron {
         return this;
     }
 
-    public Double getSumaMedida() {
+    public Integer getSumaMedida() {
         return sumaMedida;
     }
 
-    public ElementoPatron setSumaMedida(Double sumaMedida) {
+    public ElementoPatron setSumaMedida(Integer sumaMedida) {
         this.sumaMedida = sumaMedida;
         return this;
     }
 
-    public Double getMedida() {
+    public Integer getMedida() {
         return medida;
     }
 
@@ -50,11 +50,11 @@ public class ElementoPatron {
                         "-" +
 //                ", sumaMedida=" + sumaMedida +
 //                ", medida=" +
-                df.format(medida) + " : ";
+                        medida + " : ";
     }
 
-    public static Double sumaTotal(ArrayList<ElementoPatron> elementos){
-        Double total = 0.0;
+    public static Integer sumaTotal(ArrayList<ElementoPatron> elementos){
+        Integer total = 0;
         for (ElementoPatron elemento:elementos) {
             total += elemento.getSumaMedida();
         }
