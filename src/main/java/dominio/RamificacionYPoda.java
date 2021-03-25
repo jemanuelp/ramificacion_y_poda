@@ -50,7 +50,39 @@ public class RamificacionYPoda {
     }
 
     private ArrayList<ArrayList<ElementoPatron>> esquemas = new ArrayList<>();
-    public void ramificar(int L, int suma,ArrayList<ElementoPatron> esquema, int[] li,int menor, int index,int pivot) {
+    public void ramificar(int L, int suma,ArrayList<ElementoPatron> esquema, int[] li,int menor, int index) {
+        if (esquema.size() < li.length){
+            for (int i=0; i<L ; i++){
+                suma += (double)i*li[index];
+                ElementoPatron elementoPatron = new ElementoPatron(0,0,li[index]);
+                if (suma<=L){
+                    elementoPatron = new ElementoPatron(i,i*li[index],li[index]);
+                    esquema.add(elementoPatron);
+                    ramificar(L,suma,esquema,li,menor,index+1);
+                    int indexOf = esquema.indexOf(elementoPatron);
+                    esquema.remove(indexOf);
+                }
+                suma -= (double)i*li[index];
+            }
+        } else{
+            if ((L - suma + 0.01) < menor){
+//              DecimalFormat df = new DecimalFormat("#");
+                if (!existsEsquema(esquemas,esquema)){
+                    esquemas.add((ArrayList<ElementoPatron>)esquema.clone());
+                    System.out.println(esquema);
+                    System.out.println(L - ElementoPatron.sumaTotal(esquema));
+                    System.out.println(suma);
+                    System.out.println("Totales = "+esquemas.size());
+                    try {
+                        writeExcel(esquema,esquemas.size());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+    public void ramificarConPivot(int L, int suma,ArrayList<ElementoPatron> esquema, int[] li,int menor, int index,int pivot) {
         if (esquema.size() < li.length){
             for (int i=0; i<L ; i++){
                 if((L-suma) > (24*li[index])){
@@ -68,16 +100,16 @@ public class RamificacionYPoda {
                 if (suma<=L){
                     elementoPatron = new ElementoPatron(i,i*li[index],li[index]);
                     esquema.add(elementoPatron);
-                    ramificar(L,suma,esquema,li,menor,index+1,pivot);
+                    ramificarConPivot(L,suma,esquema,li,menor,index+1,pivot);
                     int indexOf = esquema.indexOf(elementoPatron);
                     esquema.remove(indexOf);
                 }
                 suma -= (double)i*li[index];
             }
         } else{
-            if (L - suma + 0.01 < menor){
+            if ((L - suma + 0.01) < menor){
 //              DecimalFormat df = new DecimalFormat("#");
-                if (!existsEsquema(esquemas,esquema)){
+                if (!existsEsquemaConPivot(esquemas,esquema)){
                     esquemas.add((ArrayList<ElementoPatron>)esquema.clone());
                     System.out.println(esquema);
                     System.out.println(L - ElementoPatron.sumaTotal(esquema));
@@ -149,6 +181,21 @@ public class RamificacionYPoda {
 
     public boolean existsEsquema(ArrayList<ArrayList<ElementoPatron>> esquemas, ArrayList<ElementoPatron> esquema) {
         boolean b = false;
+        for (ArrayList<ElementoPatron> esq: esquemas){
+            if(compararSync(esq,esquema)){
+                b=true;
+                break;
+            }
+        }
+        return b;
+    }
+    public boolean existsEsquemaConPivot(ArrayList<ArrayList<ElementoPatron>> esquemas, ArrayList<ElementoPatron> esquema) {
+        boolean b = true;
+        for (ElementoPatron el: esquema) {
+            if ((el.getCantidad() % 24) == 0 || el.getCantidad() == 0){
+                b = false;
+            }
+        }
         for (ArrayList<ElementoPatron> esq: esquemas){
             if(compararSync(esq,esquema)){
                 b=true;
